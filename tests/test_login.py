@@ -8,13 +8,13 @@ from locators.login_page_locators import LoginPageLocators
 class TestLogin(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Chrome()
-        self.driver.get("https://example.com")
+        self.driver.get("https://demo.guru99.com")
         self.login_page = LoginPage(self.driver)
 
     def test_successful_login(self):
-        self.login_page.enter_username("your_username")
-        self.login_page.enter_password("your_password")
-        self.login_page.click_login_button()
+        self.login_page.enter_email("abc@gmail.com")
+        # self.login_page.enter_password("your_password")
+        self.login_page.click_submit_button()
 
         # Add assertions to verify the login was successful
 
