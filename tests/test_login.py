@@ -10,31 +10,15 @@ from locators.login_page_locators import LoginPageLocators
 from pages.login_page import LoginPage
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from selenium.webdriver.firefox.service import Service as FirefoxService
 
 
 class TestLogin(unittest.TestCase):
     def setUp(self):
-        import argparse
-        parser = argparse.ArgumentParser()
-        parser.add_argument("--browser", choices=["chrome","firefox"], default="chrome")
-        args = parser.parse_args()
-        selected_browser = args.browser
 
-        if selected_browser == "chrome":
-            chromedriverpath = "C:\\Users\\Dr.Tautology\\PycharmProjects\\SeleniumTestFrameworkPOM\\drivers" \
+        self.chromedriver_path = "C:\\Users\\Dr.Tautology\\PycharmProjects\\SeleniumTestFrameworkPOM\\drivers" \
                             "\\chromedriver_116.exe "
-            service = ChromeService(executable_path=chromedriverpath)
-            self.driver = webdriver.Chrome(service=service)
-        elif selected_browser == "firefox":
-            geckodriverpath = "C:\\Users\\Dr.Tautology\\PycharmProjects\\SeleniumTestFrameworkPOM\\drivers" \
-                              "\\geckodriver.exe "
-            service = FirefoxService(executable_path=geckodriverpath)
-            self.driver = webdriver.Firefox(service=service)
-        else:
-            raise ValueError("Invalid browser specified.")
-
+        service = ChromeService(executable_path=self.chromedriver_path)
+        self.driver = webdriver.Chrome(service=service)
         self.driver.get("https://demo.guru99.com")
         self.login_page = LoginPage(self.driver)
         self.wait = WebDriverWait(self.driver, 20)
