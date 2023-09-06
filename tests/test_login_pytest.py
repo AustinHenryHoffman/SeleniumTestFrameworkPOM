@@ -8,11 +8,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from locators.login_page_locators import LoginPageLocators
 
 
-@pytest.mark.usefixtures("driver", "login_page")
+@pytest.mark.usefixtures("driver", "login_page", "reports_path")
 class TestLogin:
-    def test_successful_login(self, login_page):
+    def test_successful_login(self, login_page, reports_path):
 
-        login_page.wait.until(EC.presence_of_element_located((By.XPATH, LoginPageLocators.submit_email_button_locator[1])))
+        login_page.wait.until(EC.presence_of_element_located(LoginPageLocators.submit_email_button_locator))
         login_page.enter_email("abc@gmail.com")
         print("Login information entered.")
 
@@ -26,8 +26,8 @@ class TestLogin:
         login_page.wait.until(EC.invisibility_of_element(LoginPageLocators.submit_email_button_locator))
         print("Wait for element complete.")
         print("taking a screenshot.")
-        login_page.driver.save_screenshot(f"screenshot{dt.datetime.now().strftime('%m_%d_%y %I_%M_%S')}.png")
-        login_page.wait.until(EC.presence_of_element_located((By.XPATH, LoginPageLocators.account_table[1])))
+        login_page.driver.save_screenshot(Path(reports_path, f"screenshot{dt.datetime.now().strftime('%m_%d_%y %I_%M_%S')}.png"))
+        login_page.wait.until(EC.presence_of_element_located(LoginPageLocators.account_table))
 
         print("Submit button pressed.")
         print("Waiting for webdriver.")
@@ -35,8 +35,8 @@ class TestLogin:
         # Add assertions to verify the login was successful
         try:
             print("Waiting for element to be present.")
-            element = login_page.wait.until(EC.presence_of_element_located((By.XPATH, *LoginPageLocators.bank_banner)))
-            # banner_text = login_page.driver.find_element(LoginPageLocators.bank_banner).get_attribute("text").lower()
-            # assert banner_text == "guru99 bank"
+            element = login_page.wait.until(EC.presence_of_element_located(LoginPageLocators.bank_banner))
+            banner_text = login_page.driver.find_element(*LoginPageLocators.bank_banner).text.lower()
+            assert banner_text == "guru99 bank"
         except Exception as e:
             print(f"Assertion Failed:{e}")
