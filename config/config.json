@@ -1,6 +1,5 @@
 {
-  "database": {
-  "password": "test",
-  "table": "test"
-    }
+    "base_url": "https://demo.guru99.com",
+    "username": "your_username",
+    "password": "your_password"
 }
