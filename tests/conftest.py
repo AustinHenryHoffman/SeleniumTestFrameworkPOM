@@ -1,34 +1,35 @@
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from pages.login_page import LoginPage
 from pathlib import Path
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
+import json
+from pages.login_page import LoginPage
 import os
 
 
-@pytest.fixture(scope="class")
+@pytest.fixture(scope="session")
+def config():
+    with open("../config/config.json", 'r') as config_file:
+        return json.load(config_file)
+
+
+@pytest.fixture(scope="function")
 def driver(request):
     selected_browser = request.config.getoption("--browser", default="chrome")
 
     if selected_browser == "chrome":
-        chromedriver_path = "C:\\Users\\Dr.Tautology\\PycharmProjects\\SeleniumTestFrameworkPOM\\drivers" \
-                           "\\chromedriver_116.exe"
-        service = ChromeService(executable_path=chromedriver_path)
         options = ChromeOptions()
-        driver_instance = webdriver.Chrome(service=service, options=options)
+        driver_instance = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     elif selected_browser == "firefox":
-        geckodriver_path = "C:\\Users\\Dr.Tautology\\PycharmProjects\\SeleniumTestFrameworkPOM\\drivers" \
-                          "\\geckodriver.exe"
-        # Attempted to redirect the location of the geckodriver.log file
-
-        # Set the desired geckodriver.log file path
-        log_file_path = str(Path("../reports/geckodriver.log"))
-        service = FirefoxService(executable_path=geckodriver_path, log_path=log_file_path)
         options = FirefoxOptions()
-        driver_instance = webdriver.Firefox(service=service, options=options)
+        driver_instance = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=options)
     else:
         raise ValueError("Invalid browser choice")
 
@@ -36,9 +37,10 @@ def driver(request):
     driver_instance.quit()
 
 
-@pytest.fixture(scope="class")
-def login_page(driver):
-    driver.get("https://demo.guru99.com")
+@pytest.fixture(scope="function")
+def login_page(driver, config):
+    base_url = config["base_url"]
+    driver.get(base_url)
     return LoginPage(driver)
 
 
@@ -52,4 +54,3 @@ def reports_path():
     reports_dir = Path("../reports")  # Modify the path as needed
     reports_dir.mkdir(parents=True, exist_ok=True)
     yield reports_dir
-
