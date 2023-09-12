@@ -1,9 +1,8 @@
 # tests/test_login.py
 import pytest
 import datetime as dt
+import time
 from pathlib import Path
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from locators.login_page_locators import LoginPageLocators
 
@@ -18,7 +17,7 @@ class TestLogin:
 
         print("Current URL:", login_page.driver.current_url)
         print("Page Title:", login_page.driver.title)
-
+        time.sleep(5)
         print("Before clicking the submit button")
         login_page.click_submit_button()
         print("After clicking the submit button")
