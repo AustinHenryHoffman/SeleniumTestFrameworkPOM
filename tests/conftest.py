@@ -11,7 +11,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 import json
 from pages.login_page import LoginPage
-import os
+import datetime as dt
 
 
 @pytest.fixture(scope="session")
@@ -48,9 +48,18 @@ def pytest_addoption(parser):
     parser.addoption("--browser", choices=["chrome", "firefox"], default="chrome", help="Specify the browser to use for tests (e.g., --browser chrome)")
 
 
-@pytest.fixture(scope="session")
-def reports_path():
+@pytest.fixture(scope="function")
+def reports_path(request):
+    # Get the name of the test function
+    test_name = request.node.name
+
+    # Generate a timestamp
+    timestamp = dt.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+    # Create the subdirectory name by combining the test name and timestamp
+    subdirectory_name = f"{test_name}_{timestamp}"
+
     # Define the path to the reports directory
-    reports_dir = Path("../reports")  # Modify the path as needed
+    reports_dir = Path("../reports", subdirectory_name)  # Modify the path as needed
     reports_dir.mkdir(parents=True, exist_ok=True)
     yield reports_dir
