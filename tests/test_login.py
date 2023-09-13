@@ -6,8 +6,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
-from locators.login_page_locators import LoginPageLocators
-from pages.login_page import LoginPage
+from locators.guru_login_page_locators import LoginPageLocators
+from pages.guru_login_page import LoginPage
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
