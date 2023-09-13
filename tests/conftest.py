@@ -12,6 +12,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 import json
 from pages.login_page import LoginPage
 import datetime as dt
+import logging
 
 
 @pytest.fixture(scope="session")
@@ -48,6 +49,21 @@ def pytest_addoption(parser):
     parser.addoption("--browser", choices=["chrome", "firefox"], default="chrome", help="Specify the browser to use for tests (e.g., --browser chrome)")
 
 
+def configure_logger(test_name, log_file):
+    logger = logging.getLogger(test_name)
+    logger.setLevel(logging.INFO)
+
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
+    file_handler = logging.FileHandler(log_file)
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+
+    return logger
+
+
 @pytest.fixture(scope="function")
 def reports_path(request):
     # Get the name of the test function
@@ -62,4 +78,6 @@ def reports_path(request):
     # Define the path to the reports directory
     reports_dir = Path("../reports", subdirectory_name)  # Modify the path as needed
     reports_dir.mkdir(parents=True, exist_ok=True)
+
     yield reports_dir
+
