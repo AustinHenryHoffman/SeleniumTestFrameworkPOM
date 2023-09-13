@@ -4,13 +4,15 @@ import datetime as dt
 import time
 from pathlib import Path
 from selenium.webdriver.support import expected_conditions as EC
-from locators.login_page_locators import LoginPageLocators
+from locators.guru_login_page_locators import LoginPageLocators
+from pages.guru_login_page import LoginPage
 from conftest import configure_logger
 
 
-@pytest.mark.usefixtures("driver", "login_page", "reports_path")
-class TestLogin:
-    def test_successful_login(self, login_page, reports_path):
+@pytest.mark.usefixtures("driver", "reports_path")
+class TestGuruLogin:
+    @pytest.mark.usefixtures("driver")
+    def test_successful_login(self, driver, reports_path):
 
         # Set up logging
         # Get the name of the test function
@@ -22,7 +24,9 @@ class TestLogin:
         # Configure and create a logger for this test
         logger = configure_logger(test_name, log_file)
 
-        #Starting the Test
+        logger.info(f"Starting the Test:{test_name}")
+        login_page = LoginPage(driver)
+        login_page.login()
         login_page.wait.until(EC.presence_of_element_located(LoginPageLocators.submit_email_button_locator))
         login_page.enter_email("abc@gmail.com")
         logger.info("Login information entered.")
