@@ -1,4 +1,4 @@
-# locators/login_page_locators.py
+# locators/guru_login_page_locators.py
 from selenium.webdriver.common.by import By
 
 
