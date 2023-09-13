@@ -9,16 +9,8 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from pathlib import Path
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
-import json
-from pages.login_page import LoginPage
 import datetime as dt
 import logging
-
-
-@pytest.fixture(scope="session")
-def config():
-    with open("../config/config.json", 'r') as config_file:
-        return json.load(config_file)
 
 
 @pytest.fixture(scope="function")
@@ -36,13 +28,6 @@ def driver(request):
 
     yield driver_instance
     driver_instance.quit()
-
-
-@pytest.fixture(scope="function")
-def login_page(driver, config):
-    base_url = config["base_url"]
-    driver.get(base_url)
-    return LoginPage(driver)
 
 
 def pytest_addoption(parser):
