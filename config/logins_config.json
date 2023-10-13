@@ -1,0 +1,17 @@
+{
+  "Guru99": {
+    "url": "https://demo.guru99.com",
+    "username": "your_username",
+    "password": "your_password"
+  },
+  "Tricentis_Demo": {
+    "url": "https://demowebshop.tricentis.com/",
+    "username": "jerky@gmail.com",
+    "password": "test123"
+  },
+  "Example Website 3": {
+    "url": "https://www.example3.com",
+    "username": "user3",
+    "password": "secretPass789"
+  }
+}
